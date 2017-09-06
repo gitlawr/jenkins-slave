@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:16.04
 
 MAINTAINER Bilal Sheikh <bilal@techtraits.com>
 
@@ -38,10 +38,20 @@ RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz \
   && tar --strip-components=2 -xzvf rancher-linux-amd64-v0.4.1.tar.gz -C /usr/local/bin \
   && chmod +x /usr/local/bin/rancher
 
+RUN git config --global user.email "ci@rancher.com" &&git config --global user.name "rancher_ci"
+
+# add tools for cicd
+# https://github.com/rancher/cli
+ADD rancher /usr/local/bin/rancher
+# https://github.com/gitlawr/mergeyaml
+ADD mergeyaml /usr/local/bin/mergeyaml
+# https://github.com/gitlawr/rancher-upgrader
+ADD rancher-upgrader /usr/local/bin/rancher-upgrader
+
 VOLUME /var/lib/docker
 
-#ENV JENKINS_USERNAME jenkins
-#ENV JENKINS_PASSWORD jenkins
-#ENV JENKINS_MASTER http://jenkins:8080
+ENV JENKINS_USERNAME admin
+ENV JENKINS_PASSWORD admin
+ENV JENKINS_MASTER http://jenkins:8080
 
 CMD /bin/bash /cmd.sh
