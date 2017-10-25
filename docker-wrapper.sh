@@ -1,5 +1,8 @@
 #!/bin/bash
 
+git config --global user.email "ci@rancher.com" \
+&& git config --global user.name "rancher_ci"
+
 for i in {0..6}
 do
     mknod -m0660 /dev/loop$i b 7 $i
